@@ -6,6 +6,7 @@ Resources:
         - !Ref InstanceSecurityGroup
       KeyName: webapp-key
       ImageId: 'ami-0a36eb8fadc976275'
+      InstanceType: 't2.micro'
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
