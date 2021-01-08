@@ -29,7 +29,7 @@ jobs:
       - run:
           name: "Create CloudFormation Stack"
           command: |
-            aws cloudformation create-stack --stack-name myfirsttest --region $AWS_DEFAULT_REGION --template-body file://stack.yml
+            aws cloudformation create-stack --stack-name myfirsttest --template-body file://stack.yml
       
 workflows:
   welcome:
