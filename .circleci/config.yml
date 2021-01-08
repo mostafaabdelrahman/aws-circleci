@@ -12,7 +12,7 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
-      - checkout:
+      - checkout
       - run:
           name: "cat README.md"
           command: |
