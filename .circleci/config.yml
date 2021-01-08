@@ -8,8 +8,18 @@ jobs:
           name: "echo an env var that is part of our project"
           command: |
             echo $AWS_ACCESS_KEY_ID
+  learn-checkout:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout:
+      - run:
+          name: "cat README.md"
+          command: |
+            cat README.md
 workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - print_owner
+      #- print_owner
+      - learn-checkout
