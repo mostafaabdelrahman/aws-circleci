@@ -1,25 +1,36 @@
 version: 2.1
 jobs:
-  print_owner:
+  # print_owner:
+  #   docker:
+  #     - image: cimg/base:2020.01
+  #   steps:
+  #     - run:
+  #         name: "echo an env var that is part of our project"
+  #         command: |
+  #           echo $AWS_ACCESS_KEY_ID
+  # learn-checkout:
+  #   docker:
+  #     - image: cimg/base:2020.01
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: "cat README.md"
+  #         command: |
+  #           cat README.md
+
+  run-cloudformation:
     docker:
-      - image: cimg/base:2020.01
-    steps:
-      - run:
-          name: "echo an env var that is part of our project"
-          command: |
-            echo $AWS_ACCESS_KEY_ID
-  learn-checkout:
-    docker:
-      - image: cimg/base:2020.01
+      - image: amazon/aws-cli
     steps:
       - checkout
-      - run:
-          name: "cat README.md"
-          command: |
-            cat README.md
+      - run: export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID          
+      - run: export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+      - run: export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+      - run: export
+      
 workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
       #- print_owner
-      - learn-checkout
+      - run-cloudformation
