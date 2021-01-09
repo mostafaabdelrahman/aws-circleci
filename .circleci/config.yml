@@ -24,11 +24,11 @@ jobs:
         name: "Install Ansible using apk"
         command: |
           apk add ansible
-    - run: export ANSIBLE_HOST_KEY_CHECKING=False
+    #- run: export ANSIBLE_HOST_KEY_CHECKING=False
     - run:
         name: "Configure Node.js on new ubuntu server"
         command: |
-          echo "[defaults]\nhost_key_checking = False" > ~/.ansible.cfg && ansible-playbook main-remote.yml -i inventory
+          ansible-playbook main-remote.yml -i inventory
 
 workflows:
   welcome:
