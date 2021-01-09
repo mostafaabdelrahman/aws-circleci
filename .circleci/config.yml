@@ -28,7 +28,7 @@ jobs:
     - run:
         name: "Configure Node.js on new ubuntu server"
         command: |
-          ansible-playbook main-remote.yml -i inventory
+          echo "[defaults]\nhost_key_checking = False" > ~/.ansible.cfg && ansible-playbook main-remote.yml -i inventory
 
 workflows:
   welcome:
