@@ -27,7 +27,7 @@ jobs:
     - run:
         name: "Configure Node.js on new ubuntu server"
         command: |
-          ansible-playbook main-remote.yml -i inventory
+          ansible-playbook main-remote.yml -i inventory --ssh-common-args StrictHostKeyChecking=no
 
 workflows:
   welcome:
