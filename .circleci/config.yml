@@ -15,17 +15,17 @@ jobs:
   configure-environment:
     docker:
       - image: python:3.7-alpine3.11
+    # add env var for ssh key checking bypass
     environment:
       ANSIBLE_HOST_KEY_CHECKING: False
     steps:
-    - add_ssh_keys:
-          fingerprints:
-            - "4f:66:70:dc:47:8d:20:bf:ed:b3:1e:a2:1c:92:9d:bd"
     - checkout
+    - add_ssh_keys:
+        fingerprints: ["4f:66:70:dc:47:8d:20:bf:ed:b3:1e:a2:1c:92:9d:bd"]
     - run:
         name: "Install Ansible using apk"
         command: |
-          apk add ansible
+          apk add --update ansible
     - run:
         name: "Configure Node.js on new ubuntu server"
         command: |
