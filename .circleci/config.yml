@@ -24,6 +24,7 @@ jobs:
         name: "Install Ansible using apk"
         command: |
           apk add ansible
+    - run: export ANSIBLE_HOST_KEY_CHECKING=False
     - run:
         name: "Configure Node.js on new ubuntu server"
         command: |
