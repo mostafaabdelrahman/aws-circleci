@@ -21,6 +21,10 @@ jobs:
             - "4f:66:70:dc:47:8d:20:bf:ed:b3:1e:a2:1c:92:9d:bd"
     - checkout
     - run:
+        name: "Install Ansible using pip"
+        command: |
+          python -m pip install --user ansible
+    - run:
         name: "Configure Node.js on new ubuntu server"
         command: |
           ansible-playbook main-remote.yml -i inventory
