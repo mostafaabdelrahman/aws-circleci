@@ -1,39 +1,33 @@
 version: 2.1
 jobs:
-  # print_owner:
+  # Cloudformation to create stack
+  # run-cloudformation:
   #   docker:
-  #     - image: cimg/base:2020.01
-  #   steps:
-  #     - run:
-  #         name: "echo an env var that is part of our project"
-  #         command: |
-  #           echo $AWS_ACCESS_KEY_ID
-  # learn-checkout:
-  #   docker:
-  #     - image: cimg/base:2020.01
+  #     - image: amazon/aws-cli
   #   steps:
   #     - checkout
   #     - run:
-  #         name: "cat README.md"
+  #         name: "Create CloudFormation Stack"
   #         command: |
-  #           cat README.md
-
-  run-cloudformation:
+  #           aws cloudformation create-stack --stack-name myfirsttest --template-body file://stack.yml
+  
+  # configure infra using ansible
+  configure-environment:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
-      - checkout
-      - run: export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID          
-      - run: export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-      - run: export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
-      - run:
-          name: "Create CloudFormation Stack"
-          command: |
-            aws cloudformation create-stack --stack-name myfirsttest --template-body file://stack.yml
-      
+    - add_ssh_keys:
+          fingerprints:
+            - "4f:66:70:dc:47:8d:20:bf:ed:b3:1e:a2:1c:92:9d:bd"
+    - checkout
+    - run:
+        name: "Configure Node.js on new ubuntu server"
+        command: |
+          ansible-playbook main-remote.yml -i inventory
+
 workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      #- print_owner
-      - run-cloudformation
+      #- run-cloudformation
+      - configure-environment
