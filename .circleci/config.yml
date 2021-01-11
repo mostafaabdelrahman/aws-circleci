@@ -39,10 +39,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run: yum install -y tar gzip
-      - attach_workspace:
-          at: /tmp
-      - run: cat /tmp/deployment_id.txt 
       - run:
           name: "Promote to Production"
           command: |
@@ -56,6 +52,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum install -y tar gzip
       - attach_workspace:
           at: /tmp
       - run:
