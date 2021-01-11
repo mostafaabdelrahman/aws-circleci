@@ -1,0 +1,12 @@
+aws cloudformation deploy --template-file cloudfront.yml --stack-name production-distro --parameter-overrides PipelineID="${S3_BUCKET_NAME}" --tags project=udapeople &
+
+I use:
+aws cloudformation deploy --template-file cloudfront.yml --stack-name production-distro --parameter-overrides PipelineID="udacity-circleci" --tags project=udapeople &
+
+
+aws cloudformation list-exports --query "Exports[?Name==\`PipelineID\`].Value" --no-paginate --output text
+
+
+udacity-circleci
+
+aws cloudformation deploy --template-file cloudfront.yml --stack-name production-distro --parameter-overrides PipelineID="udacity-website-mostafaahmed" &

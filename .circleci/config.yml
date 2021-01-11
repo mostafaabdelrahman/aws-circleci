@@ -1,4 +1,69 @@
 version: 2.1
+
+jobs:
+
+  create_and_deploy_front_end:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: "Create CloudFormation Bucket"
+          command: |
+            aws cloudformation deploy \
+            --template-file bucket.yml \
+            --stack-name "${CIRCLE_WORKFLOW_ID}" \
+            --parameter-overrides NAME="${CIRCLE_WORKFLOW_ID}"
+      - run: aws s3 sync index.html s3://"${CIRCLE_WORKFLOW_ID}" --delete
+
+            
+  get_last_deployment_id:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: "Query CloudFormation Deployment ID"
+          command: |
+            aws cloudformation \
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+            --no-paginate --output text > /tmp/deployment_id.txt   
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - deployment_id.txt
+
+  promote_to_production:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp
+      - run: cat /tmp/deployment_id.txt 
+      - run:
+          name: "Promote to Production"
+          command: |
+            aws cloudformation deploy \
+            --template-file cloudfront.yml \
+            --stack-name production-distro \
+            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+
+  clean_up_old_front_end:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: "Cleanup Old Frontend"
+          command: |
+            export OldPipelineID=`cat /tmp/deployment_id.txt`
+            aws s3 rm "s3://${OldPipelineID}" --recursive
+            #aws cloudformation delete-stack --stack-name "udacity-circleci"
+
+
   # Start rollback exercise
 # commands:
 #   destroy_environments:
@@ -70,3 +135,10 @@ workflows:
       #- run-cloudformation
       # - configure-environment
       # - create_infrastructure
+      - create_and_deploy_front_end
+      - get_last_deployment_id:
+          requires:
+            - create_and_deploy_front_end
+      - promote_to_production:
+          requires:
+            - create_and_deploy_front_end        
