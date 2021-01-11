@@ -7,7 +7,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run: echo ${CIRCLE_WORKFLOW_ID:0:7}
       - run:
           name: "Create CloudFormation Bucket"
           command: |
@@ -23,6 +22,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum install -y tar gzip
       - run:
           name: "Query CloudFormation Deployment ID"
           command: |
@@ -39,6 +39,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum install -y tar gzip
       - attach_workspace:
           at: /tmp
       - run: cat /tmp/deployment_id.txt 
@@ -48,7 +49,7 @@ jobs:
             aws cloudformation deploy \
             --template-file cloudfront.yml \
             --stack-name production-distro \
-            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
+            --parameter-overrides PipelineID="bucket-${CIRCLE_WORKFLOW_ID:0:7}"
 
   clean_up_old_front_end:
     docker:
