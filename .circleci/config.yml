@@ -1,15 +1,15 @@
 version: 2.1
-jobs:
   # Start rollback exercise
-  commands:
-    destroy_environments:
-      steps:
-        - run:
-            name: "Delete CloudFormation Stack"
-            command: |
-              aws cloudformation delete-stack --stack-name myfirsttest
-            when: on_fail
+commands:
+  destroy_environments:
+    steps:
+      - run:
+          name: "Delete CloudFormation Stack"
+          command: |
+            aws cloudformation delete-stack --stack-name myfirsttest
+          #when: on_fail
 
+jobs:
   create_infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -28,6 +28,7 @@ jobs:
           command: |
             return 1
       - destroy_environments
+          when: on_fail
   # end of rollback exercise 
 
 
