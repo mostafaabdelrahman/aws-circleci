@@ -7,7 +7,7 @@ commands:
           name: "Delete CloudFormation Stack"
           command: |
             aws cloudformation delete-stack --stack-name myfirsttest
-          #when: on_fail
+          when: on_fail
 
 jobs:
   create_infrastructure:
@@ -27,8 +27,7 @@ jobs:
           name: "Simulate Error"
           command: |
             return 1
-      - destroy_environments:
-          when: on_fail
+      - destroy_environments
   # end of rollback exercise 
 
 
