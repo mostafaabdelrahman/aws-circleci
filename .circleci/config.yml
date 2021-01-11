@@ -28,7 +28,8 @@ jobs:
           command: |
             aws cloudformation \
             list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-            --no-paginate --output text > /tmp/deployment_id.txt   
+            --no-paginate --output text > /tmp/deployment_id.txt
+            cat /tmp/deployment_id.txt
       - persist_to_workspace:
           root: /tmp
           paths:
