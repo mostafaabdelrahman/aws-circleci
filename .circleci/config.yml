@@ -1,34 +1,34 @@
 version: 2.1
   # Start rollback exercise
-commands:
-  destroy_environments:
-    steps:
-      - run:
-          name: "Delete CloudFormation Stack"
-          command: |
-            aws cloudformation delete-stack --stack-name myfirsttest
-          when: on_fail
+# commands:
+#   destroy_environments:
+#     steps:
+#       - run:
+#           name: "Delete CloudFormation Stack"
+#           command: |
+#             aws cloudformation delete-stack --stack-name myfirsttest
+#           when: on_fail
 
-jobs:
-  create_infrastructure:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: "Create CloudFormation Stack"
-          command: |
-            aws cloudformation create-stack --stack-name myfirsttest --template-body file://stack.yml
-      - run:
-          name: "Sleep between create and delete stack"
-          command: |
-            sleep 120
-      - run:
-          name: "Simulate Error"
-          command: |
-            #return 1
-            echo Ok
-      - destroy_environments
+# jobs:
+#   create_infrastructure:
+#     docker:
+#       - image: amazon/aws-cli
+#     steps:
+#       - checkout
+#       - run:
+#           name: "Create CloudFormation Stack"
+#           command: |
+#             aws cloudformation create-stack --stack-name myfirsttest --template-body file://stack.yml
+#       - run:
+#           name: "Sleep between create and delete stack"
+#           command: |
+#             sleep 120
+#       - run:
+#           name: "Simulate Error"
+#           command: |
+#             return 1
+#             #echo Ok
+#       - destroy_environments
   # end of rollback exercise 
 
 
@@ -69,4 +69,4 @@ workflows:
     jobs:
       #- run-cloudformation
       # - configure-environment
-      - create_infrastructure
+      # - create_infrastructure
