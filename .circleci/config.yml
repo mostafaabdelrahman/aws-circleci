@@ -26,7 +26,8 @@ jobs:
       - run:
           name: "Simulate Error"
           command: |
-            return 0
+            #return 1
+            echo Ok
       - destroy_environments
   # end of rollback exercise 
 
