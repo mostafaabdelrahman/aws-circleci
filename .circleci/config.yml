@@ -3,16 +3,12 @@ jobs:
   # Start rollback exercise
   commands:
     destroy_environments:
-      parameters:
-        when_to_run:
-          type: string
-          default: "always"
       steps:
         - run:
             name: "Delete CloudFormation Stack"
             command: |
               aws cloudformation delete-stack --stack-name myfirsttest
-            when: << parameters.when_to_run >>
+            when: on_fail
 
   create_infrastructure:
     docker:
@@ -32,7 +28,6 @@ jobs:
           command: |
             return 1
       - destroy_environments
-          when_to_run: on_fail
   # end of rollback exercise 
 
 
