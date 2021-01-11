@@ -1,0 +1,24 @@
+jobs:
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+	- run: apk add --update curl
+    - run:
+        name: "Smoke Test"
+        command: |
+		  URL="https://blog.udacity.com/"
+		  if curl -s --head ${URL} # test if blog.udacity. com exists
+		  then
+		   return 0
+		  else
+		   return 1
+		  fi
+workflows:
+  welcome:
+    # Run the welcome/run job in its own container
+    jobs:
+      - smoke_test:
+          requires:
+            - configure_infrastructure
+			
