@@ -26,8 +26,8 @@ jobs:
           name: "Simulate Error"
           command: |
             return 1
-      - destroy_environments:
-          when: on_fail
+      - destroy_environments
+        when: on_fail
   # end of rollback exercise 
 
 
